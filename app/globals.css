@@ -1,26 +1,173 @@
 @import "tailwindcss";
 
+/* ============================================================
+   LUMINARY STUDIOS — Design Tokens
+   Light-first. Warm Amber accent. One palette, every section.
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base */
+  --color-base:           #F7F6F3;
+  --color-surface:        #FFFFFF;
+  --color-border:         rgba(15, 15, 15, 0.08);
+  --color-border-strong:  rgba(15, 15, 15, 0.16);
+
+  /* Text */
+  --color-text-primary:   #0A0A0B;
+  --color-text-muted:     #525252;
+  --color-text-subtle:    #A1A1AA;
+
+  /* Brand Accent — Warm Amber */
+  /* Used ONLY on: primary CTAs, focus rings, hand-writing underline, step numbers */
+  --color-accent:         #E8A043;
+  --color-accent-dark:    #D4902F;
+  --color-accent-light:   #F5BE7A;
+  --color-accent-glow:    rgba(232, 160, 67, 0.18);
+  --color-accent-glow-lg: rgba(232, 160, 67, 0.10);
+
+  /* Success / Error */
+  --color-success:        #16A34A;
+  --color-success-bg:     #F0FDF4;
+  --color-error:          #DC2626;
+  --color-error-bg:       #FEF2F2;
+
+  /* Typography */
+  --font-display: 'Instrument Serif', serif;
+  --font-body:    var(--font-geist-sans), 'Geist', system-ui, sans-serif;
+  --font-mono:    var(--font-geist-mono), 'Geist Mono', monospace;
+
+  /* Motion */
+  --ease-entrance: cubic-bezier(0.22, 0.68, 0, 1);
+  --ease-exit: ease-out;
+  --duration-micro:    200ms;
+  --duration-standard: 400ms;
+  --duration-reveal:   700ms;
+  --duration-hero:     2400ms;
+
+  /* Corner Radius */
+  --radius-input:  8px;
+  --radius-card:   12px;
+  --radius-panel:  24px;
 }
 
+/* ============================================================
+   Tailwind v4 Theme Extension
+   ============================================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-background:   var(--color-base);
+  --color-foreground:   var(--color-text-primary);
+  --color-muted:        var(--color-text-muted);
+  --color-accent:       var(--color-accent);
+
+  /* Fonts */
+  --font-sans:    var(--font-body);
+  --font-mono:    var(--font-mono);
+  --font-display: var(--font-display);
+
+  /* Radius */
+  --radius-sm:  var(--radius-input);
+  --radius-md:  var(--radius-card);
+  --radius-lg:  var(--radius-panel);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   Base Styles
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-base);
+  color: var(--color-text-primary);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-base);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+}
+
+/* Focus ring — branded amber, not browser default */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced motion — honour everywhere */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Typography Helpers
+   ============================================================ */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* ============================================================
+   Marquee Animation (used in TrustedBy section)
+   ============================================================ */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   Section spacing rhythm
+   64px mobile / 112px desktop (tightened for pre-launch)
+   ============================================================ */
+.section-padding {
+  padding-top: 4rem;      /* 64px */
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 7rem;    /* 112px */
+    padding-bottom: 7rem;
+  }
+}
+
+/* Anchor offset for taller sticky header */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* ============================================================
+   Liquid glass effect (used in Navigation)
+   ============================================================ */
+.glass {
+  background-color: rgba(247, 246, 243, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.glass-strong {
+  background-color: rgba(247, 246, 243, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
