@@ -25,8 +25,8 @@ export const site = {
   location: "Global Creative Agency",
 
   // Cal.com event link — set in .env as NEXT_PUBLIC_CAL_LINK
-  // Format: "<user>/<event-slug>" e.g. "talk-to-osiame/15min"
-  calLink: process.env.NEXT_PUBLIC_CAL_LINK ?? "talk-to-osiame/15min",
+  // Format: "<user>/<event-slug>" e.g. "talkto-osiame/15min"
+  calLink: process.env.NEXT_PUBLIC_CAL_LINK ?? "talkto-osiame/15min",
 
   // All "Book a Call" CTAs route here first (lead capture) then to cal.com
   bookingHref: "/book",
