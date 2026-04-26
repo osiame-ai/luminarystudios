@@ -117,6 +117,40 @@ export default function BookPage() {
               By continuing you agree to our{" "}
               <Link href="/privacy" className="underline hover:text-[var(--color-text-muted)] transition-colors">privacy policy</Link>.
             </p>
+
+            <div className="mt-8">
+              <div className="flex items-center gap-3 mb-4 text-[11px] uppercase tracking-wider text-[var(--color-text-subtle)]">
+                <span className="flex-1 h-px bg-[var(--color-border)]" />
+                Contact us directly
+                <span className="flex-1 h-px bg-[var(--color-border)]" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Button asChild size="lg" variant="outline" className="w-full">
+                  <a
+                    href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Hi, I'd like to book a discovery call.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("cta_click", { location: "book_form", label: "WhatsApp" })}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                    WhatsApp
+                  </a>
+                </Button>
+
+                <Button asChild size="lg" variant="outline" className="w-full">
+                  <a
+                    href={`mailto:${site.email}?subject=${encodeURIComponent("Discovery call")}`}
+                    onClick={() => track("cta_click", { location: "book_form", label: "Email" })}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <Mail className="w-4 h-4" aria-hidden="true" />
+                    Email
+                  </a>
+                </Button>
+              </div>
+            </div>
           </>
         )}
 
@@ -138,53 +172,21 @@ export default function BookPage() {
               You&apos;re in ✓
             </h2>
             <p className="text-[var(--color-text-muted)] mb-8 leading-relaxed">
-              Grab a slot, {data.name.split(" ")[0]}. Or just message us — whatever&apos;s easier.
+              Grab a slot, {data.name.split(" ")[0]} — pick a time and we&apos;ll be there.
             </p>
 
-            <div className="space-y-3">
-              <Button asChild size="lg" className="w-full">
-                <a
-                  href={`https://cal.com/${site.calLink}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => track("cta_click", { location: "book_verified", label: "Book a Call" })}
-                  className="flex items-center justify-center gap-2"
-                >
-                  Pick a time
-                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                </a>
-              </Button>
-
-              <div className="flex items-center gap-3 py-1 text-[11px] uppercase tracking-wider text-[var(--color-text-subtle)]">
-                <span className="flex-1 h-px bg-[var(--color-border)]" />
-                or reach us directly
-                <span className="flex-1 h-px bg-[var(--color-border)]" />
-              </div>
-
-              <Button asChild size="lg" variant="outline" className="w-full">
-                <a
-                  href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`Hi, I'd like to book a call. Name: ${data.name}. Business: ${data.business}.`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => track("cta_click", { location: "book_verified", label: "WhatsApp" })}
-                  className="flex items-center justify-center gap-2"
-                >
-                  <MessageCircle className="w-4 h-4" aria-hidden="true" />
-                  WhatsApp
-                </a>
-              </Button>
-
-              <Button asChild size="lg" variant="outline" className="w-full">
-                <a
-                  href={`mailto:${site.email}?subject=Booking%20request%20%E2%80%94%20${encodeURIComponent(data.business)}&body=${encodeURIComponent(`Hi Luminary Studios,\n\nI'd like to book a call.\n\nName: ${data.name}\nBusiness: ${data.business}\nPhone: ${data.phone}\nEmail: ${data.email}`)}`}
-                  onClick={() => track("cta_click", { location: "book_verified", label: "Email" })}
-                  className="flex items-center justify-center gap-2"
-                >
-                  <Mail className="w-4 h-4" aria-hidden="true" />
-                  Email
-                </a>
-              </Button>
-            </div>
+            <Button asChild size="lg" className="w-full">
+              <a
+                href={`https://cal.com/${site.calLink}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track("cta_click", { location: "book_verified", label: "Book a Call" })}
+                className="flex items-center justify-center gap-2"
+              >
+                Pick a time
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </a>
+            </Button>
 
             <p className="mt-5 text-xs text-[var(--color-text-subtle)]">
               <Link href="/" className="hover:text-[var(--color-text-muted)] transition-colors">← Back to home</Link>
