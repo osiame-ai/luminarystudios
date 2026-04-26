@@ -135,24 +135,56 @@ export default function BookPage() {
             </div>
 
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">
-              Verified ✓
+              You&apos;re in ✓
             </h2>
             <p className="text-[var(--color-text-muted)] mb-8 leading-relaxed">
-              You&apos;re all set, {data.name.split(" ")[0]}. Pick a time that works for you and we&apos;ll be there.
+              Grab a slot, {data.name.split(" ")[0]}. Or just message us — whatever&apos;s easier.
             </p>
 
-            <Button asChild size="lg" className="w-full">
-              <a
-                href={`https://cal.com/${site.calLink}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => track("cta_click", { location: "book_verified", label: "Book a Call" })}
-                className="flex items-center justify-center gap-2"
-              >
-                Book a Call
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </a>
-            </Button>
+            <div className="space-y-3">
+              <Button asChild size="lg" className="w-full">
+                <a
+                  href={`https://cal.com/${site.calLink}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track("cta_click", { location: "book_verified", label: "Book a Call" })}
+                  className="flex items-center justify-center gap-2"
+                >
+                  Pick a time
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </Button>
+
+              <div className="flex items-center gap-3 py-1 text-[11px] uppercase tracking-wider text-[var(--color-text-subtle)]">
+                <span className="flex-1 h-px bg-[var(--color-border)]" />
+                or reach us directly
+                <span className="flex-1 h-px bg-[var(--color-border)]" />
+              </div>
+
+              <Button asChild size="lg" variant="outline" className="w-full">
+                <a
+                  href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`Hi, I'd like to book a call. Name: ${data.name}. Business: ${data.business}.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track("cta_click", { location: "book_verified", label: "WhatsApp" })}
+                  className="flex items-center justify-center gap-2"
+                >
+                  <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                  WhatsApp
+                </a>
+              </Button>
+
+              <Button asChild size="lg" variant="outline" className="w-full">
+                <a
+                  href={`mailto:${site.email}?subject=Booking%20request%20%E2%80%94%20${encodeURIComponent(data.business)}&body=${encodeURIComponent(`Hi Luminary Studios,\n\nI'd like to book a call.\n\nName: ${data.name}\nBusiness: ${data.business}\nPhone: ${data.phone}\nEmail: ${data.email}`)}`}
+                  onClick={() => track("cta_click", { location: "book_verified", label: "Email" })}
+                  className="flex items-center justify-center gap-2"
+                >
+                  <Mail className="w-4 h-4" aria-hidden="true" />
+                  Email
+                </a>
+              </Button>
+            </div>
 
             <p className="mt-5 text-xs text-[var(--color-text-subtle)]">
               <Link href="/" className="hover:text-[var(--color-text-muted)] transition-colors">← Back to home</Link>
@@ -174,10 +206,10 @@ export default function BookPage() {
             </div>
 
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">
-              Something went wrong
+              That didn&apos;t go through
             </h2>
             <p className="text-[var(--color-text-muted)] mb-8 leading-relaxed">
-              We couldn&apos;t capture your details, but don&apos;t worry — reach us directly and we&apos;ll get you booked in minutes.
+              No drama. Ping us directly and we&apos;ll book you in.
             </p>
 
             <div className="space-y-3">
