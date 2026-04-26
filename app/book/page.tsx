@@ -33,27 +33,25 @@ export default function BookPage() {
     e.preventDefault();
     if (!valid || busy) return;
     setBusy(true);
-    try {
-      const res = await fetch("/api/contact", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name:    data.name,
-          email:   data.email,
-          phone:   data.phone,
-          subject: `Booking request — ${data.business}`,
-          message: `New booking request from ${data.name} (${data.business}).\nPhone: ${data.phone}`,
-        }),
-      });
-      if (!res.ok) throw new Error(`api ${res.status}`);
-      track("booking_form_submit", { business: data.business });
-      setStep("verified");
-    } catch {
-      track("booking_form_error", { business: data.business });
-      setStep("error");
-    } finally {
-      setBusy(false);
-    }
+
+    // Fire the lead-capture in the background so a mailer hiccup never
+    // blocks the visitor from reaching the calendar.
+    fetch("/api/contact", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name:    data.name,
+        email:   data.email,
+        phone:   data.phone,
+        subject: `Booking request — ${data.business}`,
+        message: `New booking request from ${data.name} (${data.business}).\nPhone: ${data.phone}`,
+      }),
+    })
+      .then(res => track(res.ok ? "booking_form_submit" : "booking_form_error", { business: data.business }))
+      .catch(() => track("booking_form_error", { business: data.business }));
+
+    setStep("verified");
+    setBusy(false);
   };
 
   return (
@@ -67,13 +65,50 @@ export default function BookPage() {
       <div className="w-full max-w-md">
         {step === "form" && (
           <>
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
               <h1 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2">
                 Book a discovery call
               </h1>
               <p className="text-[var(--color-text-muted)] text-base">
                 15 minutes. No pitch. A clear answer on whether we can help.
               </p>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-center text-sm font-medium text-[var(--color-text-primary)] mb-3">
+                Contact us directly
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <Button asChild size="lg" variant="outline" className="w-full">
+                  <a
+                    href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Hi, I'd like to book a discovery call.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("cta_click", { location: "book_form", label: "WhatsApp" })}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                    WhatsApp
+                  </a>
+                </Button>
+
+                <Button asChild size="lg" variant="outline" className="w-full">
+                  <a
+                    href={`mailto:${site.email}?subject=${encodeURIComponent("Discovery call")}`}
+                    onClick={() => track("cta_click", { location: "book_form", label: "Email" })}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <Mail className="w-4 h-4" aria-hidden="true" />
+                    Email
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mb-4 text-[11px] uppercase tracking-wider text-[var(--color-text-subtle)]">
+              <span className="flex-1 h-px bg-[var(--color-border)]" />
+              or fill in your details
+              <span className="flex-1 h-px bg-[var(--color-border)]" />
             </div>
 
             <form
@@ -135,10 +170,10 @@ export default function BookPage() {
             </div>
 
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">
-              Verified ✓
+              You&apos;re in ✓
             </h2>
             <p className="text-[var(--color-text-muted)] mb-8 leading-relaxed">
-              You&apos;re all set, {data.name.split(" ")[0]}. Pick a time that works for you and we&apos;ll be there.
+              Grab a slot, {data.name.split(" ")[0]} — pick a time and we&apos;ll be there.
             </p>
 
             <Button asChild size="lg" className="w-full">
@@ -149,7 +184,7 @@ export default function BookPage() {
                 onClick={() => track("cta_click", { location: "book_verified", label: "Book a Call" })}
                 className="flex items-center justify-center gap-2"
               >
-                Book a Call
+                Pick a time
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </a>
             </Button>
@@ -174,10 +209,10 @@ export default function BookPage() {
             </div>
 
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">
-              Something went wrong
+              Booking error
             </h2>
             <p className="text-[var(--color-text-muted)] mb-8 leading-relaxed">
-              We couldn&apos;t capture your details, but don&apos;t worry — reach us directly and we&apos;ll get you booked in minutes.
+              No drama. Ping us directly and we&apos;ll book you in.
             </p>
 
             <div className="space-y-3">
